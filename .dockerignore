@@ -1,0 +1,22 @@
+# Ignore local dependency folders
+webapp/node_modules/
+webapp/ai_service/venv/
+webapp/ai_service/__pycache__/
+webapp/ai_service/*.pyc
+
+# Ignore doc and media folders (keeps image size small)
+Final Report/
+Initial Proposal/
+Pixel/
+SRD/
+*.docx
+*.mp4
+*.pdf
+
+# Ignore Git files and secrets
+.git/
+.gitignore
+.dockerignore
+webapp/ai_service/.env
+webapp/ai_service/.env.local
+webapp/database/gradi.sqlite-journal
