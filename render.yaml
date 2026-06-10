@@ -11,10 +11,6 @@ services:
       - key: PORT
         value: 3000
       - key: GEMINI_API_KEY
-        sync: true
+        value: ""
       - key: DATABASE_PATH
         value: /data/gradi.sqlite
-    disk:
-      name: gradi-db-disk
-      mountPath: /data
-      sizeGB: 1
