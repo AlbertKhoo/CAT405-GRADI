@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - GRADI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span
+                        class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">GRADI</span>
+                    <span
+                        class="ml-4 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-100">Student
+                        Dashboard</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm font-medium text-slate-600 bg-slate-50 px-4 py-2 rounded-lg">ID: <span
+                            class="text-slate-900 font-bold">
+                            <%= studentId %>
+                        </span></div>
+                    <a href="/"
+                        class="text-slate-500 hover:text-red-500 font-medium text-sm transition-colors flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
+                        </svg>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
+
+        <!-- Header -->
+        <div>
+            <h1 class="text-3xl font-bold text-slate-900">Welcome Back</h1>
+            <p class="text-slate-500 mt-2">Manage your practicum logbooks and review AI-driven feedback to improve your
+                performance.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Left Column: Submit New Entry -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden sticky top-24">
+                    <% const isEdit = typeof editEntry !== 'undefined' && editEntry; %>
+                    <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                        <h2 class="text-xl font-semibold text-slate-800"><%= isEdit ? 'Edit Logbook Entry' : 'New Logbook Entry' %></h2>
+                    </div>
+                    <form action="<%= isEdit ? `/student/${studentId}/edit/${editEntry.id}` : `/student/${studentId}/submit` %>" method="POST" class="p-6 space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Date</label>
+                            <input type="date" name="logdate" required value="<%= isEdit ? editEntry.logdate : '' %>"
+                                class="w-full rounded-xl border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-2.5 outline-none transition-all placeholder:text-slate-400 bg-slate-50 focus:bg-white">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Start Time</label>
+                                <input type="time" id="logstarthour" name="logstarthour" required value="<%= isEdit ? editEntry.logstarthour : '' %>"
+                                    class="w-full rounded-xl border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-2.5 outline-none transition-all bg-slate-50 focus:bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">End Time</label>
+                                <input type="time" id="logendhour" name="logendhour" required value="<%= isEdit ? editEntry.logendhour : '' %>"
+                                    class="w-full rounded-xl border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-2.5 outline-none transition-all bg-slate-50 focus:bg-white">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Total Hours</label>
+                            <input type="number" id="loghours" step="any" name="loghours" required value="<%= isEdit ? editEntry.loghours : '' %>"
+                                class="w-full rounded-xl border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-2.5 outline-none transition-all bg-slate-50 focus:bg-white placeholder:text-slate-400"
+                                placeholder="e.g. 5.5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Log Notes (Reflection)</label>
+                            <textarea name="lognotes" rows="6" required
+                                class="w-full rounded-xl border-slate-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-4 py-3 outline-none transition-all bg-slate-50 focus:bg-white placeholder:text-slate-400 resize-none"
+                                placeholder="Describe your activities, challenges faced, and lessons learned..."><%= isEdit ? editEntry.lognotes : '' %></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full flex justify-center py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-xl text-sm font-semibold transition-all shadow-sm hover:shadow active:scale-[0.98]">
+                            <%= isEdit ? 'Update Entry & Re-evaluate' : 'Submit Entry for AI Evaluation' %>
+                        </button>
+                        <% if(isEdit) { %>
+                            <a href="/student/<%= studentId %>" class="w-full flex justify-center py-3 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-all">Cancel Edit</a>
+                        <% } %>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column: Historical Entries -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Stats Row -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                        <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><svg class="w-6 h-6" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total Entries</p>
+                            <p class="text-2xl font-bold text-slate-900">
+                                <%= entries.length %>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                        <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><svg class="w-6 h-6" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Total Hours Logged</p>
+                            <p class="text-2xl font-bold text-slate-900">
+                                <% let th=0; entries.forEach(e=> { th += (e.loghours||0) }); %>
+                                    <%= th.toFixed(1) %>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                        <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Avg AI Score</p>
+                            <p class="text-2xl font-bold text-slate-900">
+                                <% 
+                                    const scoredEntries = entries.filter(e => e.ai_score);
+                                    let avg = 0;
+                                    if (scoredEntries.length > 0) {
+                                        avg = scoredEntries.reduce((s, e) => s + e.ai_score, 0) / scoredEntries.length;
+                                    }
+                                %>
+                                <%= avg > 0 ? avg.toFixed(1) : '-' %>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex items-center space-x-4">
+                        <div class="p-3 bg-teal-50 text-teal-600 rounded-xl">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500">Avg Assessor Grade</p>
+                            <p class="text-2xl font-bold text-slate-900">
+                                <% 
+                                    const gradedEntries = entries.filter(e => e.assessor_grade !== null);
+                                    let avgAssessor = 0;
+                                    if (gradedEntries.length > 0) {
+                                        avgAssessor = gradedEntries.reduce((s, e) => s + e.assessor_grade, 0) / gradedEntries.length;
+                                    }
+                                %>
+                                <%= avgAssessor > 0 ? avgAssessor.toFixed(1) : '-' %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed -->
+                <h2 class="text-xl font-bold text-slate-800 pt-2">Recent Logbooks</h2>
+
+                <% if(entries.length===0) { %>
+                    <div class="text-center py-16 bg-white border border-slate-200 rounded-2xl border-dashed">
+                        <svg class="mx-auto h-12 w-12 text-slate-300 mb-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            </path>
+                        </svg>
+                        <p class="text-slate-500 text-lg font-medium">No logbooks yet.</p>
+                        <p class="text-slate-400 text-sm mt-1">Submit your first entry to see AI insights.</p>
+                    </div>
+                    <% } else { %>
+                        <% entries.forEach(entry=> { %>
+                            <div
+                                class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
+
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 text-lg">
+                                            <%= entry.logdate %>
+                                        </h3>
+                                        <div class="flex items-center gap-2 mt-1">
+                                            <span
+                                                class="text-sm bg-slate-100 text-slate-600 px-2 py-0.5 rounded flex items-center gap-1 font-medium">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <%= entry.logstarthour %> - <%= entry.logendhour %> (<%= entry.loghours
+                                                            %> hrs)
+                                            </span>
+                                            <% if(entry.assessor_grade) { %>
+                                                <span
+                                                    class="text-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200 font-semibold">Graded:
+                                                    <%= entry.assessor_grade %>/10</span>
+                                                <% } else { %>
+                                                    <span
+                                                        class="text-sm bg-amber-50 text-amber-700 px-2 py-0.5 rounded border border-amber-200 font-medium">Pending
+                                                        Grade</span>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wide">AI
+                                            Prediction</div>
+                                        <% if(entry.ai_score>= 8) { %>
+                                            <div class="text-2xl font-black text-emerald-600">
+                                                <%= entry.ai_score || '-' %><span
+                                                        class="text-sm text-emerald-400">/10</span>
+                                            </div>
+                                            <% } else if(entry.ai_score>= 5) { %>
+                                                <div class="text-2xl font-black text-blue-600">
+                                                    <%= entry.ai_score || '-' %><span
+                                                            class="text-sm text-blue-400">/10</span>
+                                                </div>
+                                                <% } else { %>
+                                                    <div class="text-2xl font-black text-slate-600">
+                                                        <%= entry.ai_score || '-' %><span
+                                                                class="text-sm text-slate-400">/10</span>
+                                                    </div>
+                                                    <% } %>
+                                        <div class="mt-2 flex justify-end space-x-2">
+                                            <a href="/student/<%= studentId %>/edit/<%= entry.id %>" class="text-xs bg-blue-50 text-blue-600 border border-blue-200 px-2 py-1 rounded hover:bg-blue-100 transition-colors">Edit</a>
+                                            <form action="/student/<%= studentId %>/delete/<%= entry.id %>" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this entry?');">
+                                                <button type="submit" class="text-xs bg-red-50 text-red-600 border border-red-200 px-2 py-1 rounded hover:bg-red-100 transition-colors cursor-pointer">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="text-slate-700 mt-4 mb-5 text-sm leading-relaxed prose max-w-none bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <%- entry.lognotes %>
+                                </div>
+
+                                <% if(entry.ai_feedback) { %>
+                                    <div
+                                        class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 flex gap-4 mt-4">
+                                        <div class="flex-shrink-0 mt-0.5 text-indigo-500">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-indigo-800 uppercase tracking-wider mb-1">
+                                                AI Assessor Feedback</h4>
+                                            <p class="text-indigo-900 text-sm font-medium leading-relaxed italic">
+                                                <%= entry.ai_feedback %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+                            </div>
+                            <% }) %>
+                                <% } %>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startInput = document.getElementById('logstarthour');
+            const endInput = document.getElementById('logendhour');
+            const hoursInput = document.getElementById('loghours');
+            
+            function calculateHours() {
+                const startVal = startInput.value;
+                const endVal = endInput.value;
+                if (startVal && endVal) {
+                    const [startH, startM] = startVal.split(':').map(Number);
+                    const [endH, endM] = endVal.split(':').map(Number);
+                    
+                    let diffMinutes = (endH * 60 + endM) - (startH * 60 + startM);
+                    if (diffMinutes < 0) {
+                        // Handles case where shift crosses midnight
+                        diffMinutes += 24 * 60;
+                    }
+                    
+                    const hours = diffMinutes / 60;
+                    hoursInput.value = parseFloat(hours.toFixed(2));
+                }
+            }
+            
+            startInput.addEventListener('input', calculateHours);
+            endInput.addEventListener('input', calculateHours);
+        });
+    </script>
+</body>
+</html>

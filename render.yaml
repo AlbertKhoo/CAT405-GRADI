@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: gradi-app
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: GEMINI_API_KEY
+        sync: true
+      - key: DATABASE_PATH
+        value: /data/gradi.sqlite
+    disk:
+      name: gradi-db-disk
+      mountPath: /data
+      sizeGB: 1
