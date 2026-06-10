@@ -154,7 +154,8 @@ router.get('/assessor', (req, res) => {
         SELECT u.id as student_id, u.username, u.name as student_name,
                COUNT(e.id) as total_entries,
                SUM(CASE WHEN e.assessor_grade IS NULL THEN 1 ELSE 0 END) as pending_review,
-               AVG(e.ai_score) as avg_ai_score
+               AVG(e.ai_score) as avg_ai_score,
+               AVG(e.assessor_grade) as avg_final_score
         FROM logbook_entries e
         JOIN projects p ON e.project_id = p.project_id
         JOIN users u ON p.student_id = u.id
