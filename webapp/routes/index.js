@@ -357,7 +357,10 @@ router.post('/admin/model/train', isAdmin, (req, res) => {
     const path = require('path');
     
     const scriptPath = path.resolve(__dirname, '../ai_service/train_model.py');
-    const venvPython = path.resolve(__dirname, '../ai_service/venv/Scripts/python.exe');
+    const isWindows = process.platform === 'win32';
+    const venvPython = isWindows 
+        ? path.resolve(__dirname, '../ai_service/venv/Scripts/python.exe')
+        : path.resolve(__dirname, '../ai_service/venv/bin/python');
     
     console.log(`Spawning retraining process at ${scriptPath} using python ${venvPython}...`);
     
