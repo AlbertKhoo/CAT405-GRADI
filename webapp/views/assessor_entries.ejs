@@ -45,38 +45,34 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
 
-        <div class="flex items-center gap-4">
-            <a href="/assessor" class="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-xl transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-            </a>
-            <div>
-                <h1 class="text-3xl font-bold text-slate-900">Student Logbook Submissions</h1>
-            <p class="text-slate-500 mt-2">Review submissions, check AI-generated insights, and provide final formal
-                grades.</p>
-        </div>
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-slate-200 pb-6">
+            <div class="flex items-center gap-4">
+                <a href="/assessor" class="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2.5 rounded-xl transition-all shadow-sm hover:shadow-md flex-shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </a>
+                <div>
+                    <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Student Logbook Submissions</h1>
+                    <p class="text-slate-500 mt-1 text-sm">Review submissions, check AI-generated insights, and provide final formal grades.</p>
+                </div>
+            </div>
 
-        <!-- Filter/Stats Row -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Total Entries</p>
-                <p class="text-3xl font-bold text-slate-900 mt-1">
-                    <%= entries.length %>
-                </p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Pending Review</p>
-                <p class="text-3xl font-bold text-amber-500 mt-1">
-                    <%= entries.filter(e=> !e.assessor_grade).length %>
-                </p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-sm font-medium text-slate-500">Average AI Score</p>
-                <p class="text-3xl font-bold text-emerald-600 mt-1">
-                    <% const scored=entries.filter(e=> e.ai_score);
-                        const avg = scored.length ? scored.reduce((sum, e) => sum + e.ai_score, 0) / scored.length : 0;
-                        %>
-                        <%= avg.toFixed(1) %>
-                </p>
+            <!-- Stats Inline -->
+            <div class="flex gap-2 self-stretch lg:self-auto overflow-x-auto pb-1 lg:pb-0">
+                <div class="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center items-center min-w-[76px]">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center line-clamp-1">Tot Ent</span>
+                    <span class="text-xl font-extrabold text-slate-800 mt-0.5"><%= entries.length %></span>
+                </div>
+                <div class="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center items-center min-w-[76px]">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center line-clamp-1">Pe Re</span>
+                    <span class="text-xl font-extrabold text-amber-500 mt-0.5"><%= entries.filter(e=> !e.assessor_grade).length %></span>
+                </div>
+                <div class="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center items-center min-w-[76px]">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center line-clamp-1">Av AI Sc</span>
+                    <span class="text-xl font-extrabold text-emerald-600 mt-0.5">
+                        <% const scored=entries.filter(e=> e.ai_score);
+                           const avg = scored.length ? scored.reduce((sum, e) => sum + e.ai_score, 0) / scored.length : 0;
+                        %><%= avg.toFixed(1) %></span>
+                </div>
             </div>
         </div>
 
