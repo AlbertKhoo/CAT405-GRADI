@@ -73,6 +73,13 @@
                            const avg = scored.length ? scored.reduce((sum, e) => sum + e.ai_score, 0) / scored.length : 0;
                         %><%= avg.toFixed(1) %></span>
                 </div>
+                <div class="bg-white px-4 py-3 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center items-center min-w-[76px]">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center line-clamp-1">Av Fi Sc</span>
+                    <span class="text-xl font-extrabold text-indigo-600 mt-0.5">
+                        <% const graded=entries.filter(e=> e.assessor_grade);
+                           const avgFinal = graded.length ? graded.reduce((sum, e) => sum + e.assessor_grade, 0) / graded.length : 0;
+                        %><%= avgFinal ? avgFinal.toFixed(1) : '-' %></span>
+                </div>
             </div>
         </div>
 
