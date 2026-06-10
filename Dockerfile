@@ -1,4 +1,4 @@
-FROM node:20-bullseye
+FROM node:20
 
 # Install Python 3, pip, venv, and build dependencies
 RUN apt-get update && apt-get install -y \
@@ -15,10 +15,10 @@ WORKDIR /app
 # Copy dataset folder first (needed for training/seeding)
 COPY dataset /app/dataset
 
-# Copy webapp package files and install production dependencies
+# Copy webapp package files and install production dependencies (building native modules from source)
 COPY webapp/package*.json /app/webapp/
 WORKDIR /app/webapp
-RUN npm ci --only=production
+RUN npm ci --only=production --build-from-source
 
 # Copy Python requirements and build Python venv
 COPY webapp/ai_service/requirements.txt /app/webapp/ai_service/
